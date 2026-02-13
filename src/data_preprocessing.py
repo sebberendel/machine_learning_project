@@ -43,14 +43,27 @@ df = df.drop('snow', axis=1)
 X = df.drop('increase_stock', axis=1)
 y = df['increase_stock']
 
-#scaled version od data. standard scaler is used i.e. x = (x - mean) / std
-X_scaled = StandardScaler().fit_transform(X) # this is (x-mean)/std. dont do fit for test data, only transform
+#scaled version od data. standard scaler is used i.e. x = (x - mean) / std. we avoid to scale days 
 
-#make it a dataframe again to be able to use the cov function etc. also to be able to see the column names when printing
-X_scaled = pd.DataFrame(X_scaled, columns=X.columns)
+# identify day columns
+day_cols = ['day_0', 'day_1', 'day_2', 'day_3', 'day_4', 'day_5', 'day_6']
+cols_to_scale = X.columns.difference(day_cols)
+X_scaled_part = StandardScaler().fit_transform(X[cols_to_scale])
+# Gör tillbaka till DataFrame
+X_scaled_part = pd.DataFrame(
+    X_scaled_part,
+    columns=cols_to_scale,
+    index=X.index
+)
+# Lägg tillbaka day_cols utan scaling
+X_scaled = pd.concat([X_scaled_part, X[day_cols]], axis=1)
+
+# (valfritt) behåll ursprunglig kolumnordning
+X_scaled = X_scaled[X.columns]
+
 
 #combine scaled features with target variable. Ready to use.
 df_scaled = pd.concat([X_scaled, y], axis=1)
-
+print(X_scaled.head())
 
 
