@@ -44,8 +44,12 @@ X = df.drop('increase_stock', axis=1)
 X_holdout = X.sample(frac=0.2, random_state=1)  # 20% holdout set
 X = X.drop(X_holdout.index)  # Resterande 80% för träning
 y = df['increase_stock']
-y = y.drop(X_holdout.index)  # Resterande 80% för träning
+
+# först: plocka ut holdout
 y_holdout = y.loc[X_holdout.index]
+
+# sen: resten är träning
+y = y.drop(X_holdout.index)
 
 # --- Columns that should NOT be scaled ---
 day_cols = [c for c in X.columns if c.startswith("day_")]
