@@ -34,21 +34,19 @@ df = df.drop(
         'hour_of_day',
         'snowdepth',
         'snow',
-        'holiday',   # droppas enligt krav
-        'weekday'    # droppas enligt krav
+        'holiday', 
+        'weekday'   
     ]
 )
 
 # --- Split features / target ---
 X = df.drop('increase_stock', axis=1)
 X_holdout = X.sample(frac=0.2, random_state=1)  # 20% holdout set
-X = X.drop(X_holdout.index)  # Resterande 80% för träning
+X = X.drop(X_holdout.index) 
 y = df['increase_stock']
 
-# först: plocka ut holdout
 y_holdout = y.loc[X_holdout.index]
 
-# sen: resten är träning
 y = y.drop(X_holdout.index)
 
 # --- Columns that should NOT be scaled ---
@@ -82,9 +80,9 @@ X_scaled = X_scaled[X.columns]
 # --- Final dataset ---
 df_scaled = pd.concat([X_scaled, y], axis=1)
 
-print(X_scaled.describe())
 
-# - Pipeline ----------------------------------------------
+
+# - Pipeline --
 def get_pipeline(model):
     # cols_to_scale = [col for col in X.columns if col not in ['increase_stock'] and col not in ['day_Monday', 'day_Tuesday', 'day_Wednesday', 'day_Thursday', 'day_Friday', 'day_Saturday', 'day_Sunday', 'snow_or_not', 'summertime']]
     preprocessor = ColumnTransformer(
