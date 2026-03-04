@@ -65,17 +65,18 @@ def get_pipeline(model):
         ("model", model),
     ])
 
-
 def load_training_data():
-    df = pd.read_csv(TRAINING_DATA_PATH)
-    X = df.drop("increase_stock", axis=1)
-    y = df["increase_stock"]
-
+    X, y = load_full_training_data()
     X_train, X_holdout, y_train, y_holdout = train_test_split(
         X, y, test_size=0.2, random_state=1, stratify=y
     )
     return X_train, X_holdout, y_train, y_holdout
 
+def load_full_training_data():
+    df = pd.read_csv(TRAINING_DATA_PATH)
+    X = df.drop("increase_stock", axis=1)
+    y = df["increase_stock"]
+    return X, y
 
 def load_test_data():
     return pd.read_csv(TEST_DATA_PATH)

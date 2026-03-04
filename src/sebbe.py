@@ -124,7 +124,7 @@ y_holdout_pred = pipeline.predict(X_holdout)
 print(classification_report(y_holdout, y_holdout_pred))
 """
 
-"""
+
 # ----------------------------------------------------
 # Fit final model on ALL training data
 # ----------------------------------------------------
@@ -148,5 +148,4 @@ binary_predictions = np.where(
 #     fmt="%d",
 #     delimiter=","
 # )
-#print(binary_predictions)
-"""
+print(binary_predictions)
