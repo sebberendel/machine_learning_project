@@ -3,13 +3,13 @@ import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, cross_val_predict
 
-from data_preprocessing import load_training_data, load_test_data, get_pipeline
+from data_preprocessing import load_full_training_data, load_training_data, load_test_data, get_pipeline
 
 # ----------------------------------------------------
 # Load data
 # ----------------------------------------------------
 
-X, y = load_training_data()
+X, y = load_full_training_data()
 X_test = load_test_data()
 
 # ----------------------------------------------------
