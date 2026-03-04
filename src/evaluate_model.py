@@ -10,7 +10,8 @@ from sklearn.metrics import classification_report
 # sys.path.append('../src')  # lägg till src i sökvägarna
 
 # - Define train/test data -----------------------------
-from test_data_preprocessing import X, y, get_pipeline, X_holdout, y_holdout
+from src.old_data_preprocessing import X, y, get_pipeline, X_holdout, y_holdout
+from src.data_preprocessing import X_test
 
 np.random.seed(1)
 
@@ -51,9 +52,14 @@ QDA = skl_da.QuadraticDiscriminantAnalysis(reg_param=0.21052631578947367, priors
 # Create a list of models to evaluate
 models = [random_forest, kNN, log_reg, LDA, QDA]
 
+predictions = {}
 # Testing all models
 for model in models:
     pipeline = get_pipeline(model)
     model.fit(X, y)
     y_holdout_pred = model.predict(X_holdout)
-    print(model, "\n", classification_report(y_holdout, y_holdout_pred), "\n\n")
+    predictions[str(model)] = y_holdout_pred
+    #print(model, "\n", classification_report(y_holdout, y_holdout_pred), "\n\n")
+
+print(predictions)
+
