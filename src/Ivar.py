@@ -7,6 +7,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
     accuracy_score,
     recall_score,
+    make_scorer
 )
 
 from data_preprocessing import load_training_data, load_test_data, get_pipeline
@@ -56,6 +57,12 @@ plt.show()
 # ====================================================
 # 2) GRID SEARCH (C + solver)
 # ====================================================
+
+recall_high = make_scorer(
+    recall_score,
+    pos_label="high_bike_demand"
+)
+
 tune_model = LogisticRegression(
     max_iter=5000,
     random_state=1,
@@ -65,7 +72,7 @@ tune_model = LogisticRegression(
 tune_pipe = get_pipeline(tune_model)
 
 param_grid = {
-    "model__C": np.logspace(-3, 2, 6),
+    "model__C": np.logspace(-4, 2, 6),
     "model__solver": ["lbfgs", "liblinear", "newton-cg", "sag", "saga"],
 }
 
