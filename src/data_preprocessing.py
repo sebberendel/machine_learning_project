@@ -31,7 +31,7 @@ def feature_engineering(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def get_pipeline(model):
-    feature_step = FunctionTransformer(feature_engineering)
+    feature_step = FunctionTransformer(feature_engineering, validate=False)
 
     # Vi väljer samma logik som i gamla:
     # - day_of_week one-hot
@@ -72,7 +72,7 @@ def load_training_data():
     y = df["increase_stock"]
 
     X_train, X_holdout, y_train, y_holdout = train_test_split(
-        X, y, test_size=0.2, random_state=1
+        X, y, test_size=0.2, random_state=1, stratify=y
     )
     return X_train, X_holdout, y_train, y_holdout
 
