@@ -4,31 +4,26 @@ from sklearn.ensemble import RandomForestClassifier
 import sklearn.neighbors as skl_nb
 import sklearn.discriminant_analysis as skl_da
 from sklearn.metrics import classification_report
-
-# import sys
-
-# sys.path.append('../src')  # lägg till src i sökvägarna
-
-# - Define train/test data -----------------------------
-from src.old_data_preprocessing import X, y, get_pipeline, X_holdout, y_holdout
-from src.data_preprocessing import X_test
-
-np.random.seed(1)
-
-# - Final models -----------------------------------------
 from sklearn.linear_model import LogisticRegression
 
-# --
+# - Define train/test data -----------------------------
+from data_preprocessing import load_training_data, get_pipeline
+
+np.random.seed(10)
+
+X_train, X_holdout, y_train, y_holdout  = load_training_data()
+
+# - Final models -----------------------------------------
 
 random_forest = RandomForestClassifier(
     n_estimators=300,
-    max_depth=20,
-    max_features='sqrt',
-    class_weight={'high_bike_demand': 16, 'low_bike_demand': 1},
+    max_depth=40,
+    max_features=0.5,
+    class_weight={"high_bike_demand": 30, "low_bike_demand": 1},
     random_state=1,
     n_jobs=-1,
     min_samples_leaf=10,
-    min_samples_split=2
+    min_samples_split=2,
 )
 
 kNN = skl_nb.KNeighborsClassifier(n_neighbors=6)
@@ -39,27 +34,25 @@ log_reg = LogisticRegression(
     class_weight={'high_bike_demand': 10, 'low_bike_demand': 1},
     random_state=1,
     max_iter=1000,
-    C=1.0,
-    solver='liblinear',
+    C=0.4,
+    solver='newton-cg',
 )
 
 # --
 
 priors = [0.61, 0.39] 
-LDA = skl_da.LinearDiscriminantAnalysis(priors=priors, tol=1e-4, )
-QDA = skl_da.QuadraticDiscriminantAnalysis(reg_param=0.21052631578947367, priors=priors)
+QDA = skl_da.QuadraticDiscriminantAnalysis(reg_param=0.10526315789473684, priors=priors)
 
 # Create a list of models to evaluate
-models = [random_forest, kNN, log_reg, LDA, QDA]
+models = [random_forest, kNN, log_reg, QDA]
 
 predictions = {}
 # Testing all models
 for model in models:
     pipeline = get_pipeline(model)
-    model.fit(X, y)
+    model.fit(X_train, y_train)
     y_holdout_pred = model.predict(X_holdout)
     predictions[str(model)] = y_holdout_pred
-    #print(model, "\n", classification_report(y_holdout, y_holdout_pred), "\n\n")
+    print(model, "\n", classification_report(y_holdout, y_holdout_pred), "\n\n")
 
-print(predictions)
 
