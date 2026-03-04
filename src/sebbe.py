@@ -115,37 +115,3 @@ print(classification_report(y_train, y_pred))
 ConfusionMatrixDisplay.from_predictions(y_train, y_pred)
 plt.show()
 
-"""
-# ----------------------------------------------------
-# Evaluation on holdout set
-# ----------------------------------------------------
-pipeline.fit(X_train, y_train)
-y_holdout_pred = pipeline.predict(X_holdout)
-print(classification_report(y_holdout, y_holdout_pred))
-"""
-
-
-# ----------------------------------------------------
-# Fit final model on ALL training data
-# ----------------------------------------------------
-
-pipeline.fit(X_train, y_train)
-
-# Spara hela pipelinen
-joblib.dump(pipeline, "model.pkl")
-
-# ----------------------------------------------------
-# Utvärdera på training data
-# ----------------------------------------------------
-x_test_pred = pipeline.predict(X_test)
-
-binary_predictions = np.where(
-    x_test_pred == "high_bike_demand", 1, 0
-)
-# np.savetxt(
-#     "predictions.csv",
-#     [binary_predictions],
-#     fmt="%d",
-#     delimiter=","
-# )
-print(binary_predictions)
