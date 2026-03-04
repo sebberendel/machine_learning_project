@@ -114,3 +114,4 @@ print(classification_report(y_train, y_pred))
 
 ConfusionMatrixDisplay.from_predictions(y_train, y_pred)
 plt.show()
+
